@@ -1,3 +1,4 @@
+//sends timestamp from /mavros/localposition/odom to GCS via LoRa P2P
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>

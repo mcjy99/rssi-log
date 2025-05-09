@@ -1,3 +1,4 @@
+#launches lora_send and mavros and rosbag
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, ExecuteProcess, LogInfo
 from launch.substitutions import LaunchConfiguration, PythonExpression

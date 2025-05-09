@@ -1,4 +1,5 @@
 //monitors the wifi signal strength and publishes to topic wifi_signal
+//rosbag records data and sends to 
 #include <chrono>
 #include <cstring>
 #include <iostream>
@@ -9,13 +10,13 @@
 
 using namespace std::chrono_literals;
 
-class WifiPublisher : public rclcpp::Node
+class WifiLog : public rclcpp::Node
 {
 public:
-  WifiPublisher() : Node("wifi_publisher")
+  WifiLog() : Node("wifi_log")
   {
     publisher_ = this->create_publisher<std_msgs::msg::Int32>("wifi_signal", 10);
-    timer_ = this->create_wall_timer(1ms, std::bind(&WifiPublisher::scan_wifi, this));
+    timer_ = this->create_wall_timer(1ms, std::bind(&WifiLog::scan_wifi, this));
   }
 
 private:
@@ -68,7 +69,7 @@ private:
 
 int main(int argc, char* argv[]) {
     rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<WifiPublisher>());
+    rclcpp::spin(std::make_shared<WifiLog>());
     rclcpp::shutdown();
     return 0;
 }

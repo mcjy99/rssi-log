@@ -1,3 +1,4 @@
+#launches wifi_log and rosbag
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import ExecuteProcess, DeclareLaunchArgument
@@ -23,9 +24,9 @@ def generate_launch_description():
         
         # WiFi signal strength publisher
         Node(
-            package='wifi_monitor',
-            executable='wifi_publisher',
-            name='wifi_publisher',
+            package='rssi-log',
+            executable='wifi_log',
+            name='wifi_log',
             output='screen',
             emulate_tty=True,
             parameters=[
