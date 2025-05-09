@@ -26,6 +26,8 @@ public:
 
         this->declare_parameter<std::string>("SF", "7"); // Change SF
         SF_ = this->get_parameter("SF").as_string();
+        this->declare_parameter<std::string>("TP","22"); //change Tx power
+        TP_ = this->get_parameter("TP").as_string();
         subscription_ = this->create_subscription<nav_msgs::msg::Odometry>(
             "/mavros/local_position/odom", 10,
             std::bind(&LoraSender::odom_callback, this, std::placeholders::_1));
@@ -33,7 +35,7 @@ public:
         serial_setup();
         write_serial("AT+MODE=TEST");
         std::stringstream ss1;
-        ss1 << "AT+TEST=RFCFG,923,SF" << SF_ << ",125,8,8,14,ON,OFF,OFF";
+        ss1 << "AT+TEST=RFCFG,923,SF" << SF_ << ",125,8,8,"<< TP_ <<",ON,OFF,OFF"; //AT+TEST=RFCFG,923,SF7,125,8,8,22,ON,OFF,OFF
         write_serial(ss1.str().c_str());
 
         RCLCPP_INFO(this->get_logger(), "LoRa transmitter initialised");
@@ -57,7 +59,7 @@ private:
         ss2 << std::hex << std::uppercase << std::setfill('0');
         ss2 << std::setw(8) << timestamp_sec;     // 8 hex digits for seconds
         ss2 << std::setw(8) << timestamp_nanosec; // 8 hex digits for nanoseconds
-        std::string preamble = "AT+TEST=TXLRPKT,\"";
+        std::string preamble = "AT+TEST=TXLRPKT,\""; //AT+TEST=TXLRPKT,"1234567890" AT+TEST=RXLRPKT
         std::string timestamp_hex = ss2.str();
         std::string lora_cmd = preamble + timestamp_hex + "\"\r\n";
 
@@ -125,6 +127,7 @@ private:
     rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr subscription_;
     int serial_port;
     std::string SF_;
+    std::string TP_;
 };
 
 int main(int argc, char* argv[])

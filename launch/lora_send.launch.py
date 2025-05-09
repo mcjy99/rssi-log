@@ -14,6 +14,12 @@ def generate_launch_description():
         default_value='7',
         description='Spreading Factor for LoRa communication'
     )
+
+    tp_param = DeclareLaunchArgument(
+        'tp',
+        default_value='22',
+        description='Transmit power for LoRa'
+    )
     
     fcu_url_param = DeclareLaunchArgument(
         'fcu_url',
@@ -54,6 +60,7 @@ def generate_launch_description():
         name='lora_send',
         parameters=[{
             'SF': LaunchConfiguration('sf')
+            'TP':LaunchConfiguration('tp')
         }],
         output='screen'
     )
